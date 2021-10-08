@@ -2,32 +2,46 @@ import { Page } from './page';
 import { Pages } from './pages';
 
 
-const PagesIterable = () => class implements IterableIterator<Item> {
-    constructor(protected pages: Pages, protected openPage?: Page) {}
-
-    public next(): IteratorResult<Item> {
-        let nxt = this.pages.next();
-        if (!nxt.done) {
-            this.openPage = nxt.value;
-            return {done: false, value: this};
-        }
-        this.openPage = undefined;
-        return {done: true, value: null};
-    }
-
-    [Symbol.iterator](): IterableIterator<Item> {
-        return this;
-    }
-
-    protected get pageSuffix(): String {
-        if (typeof(this.openPage) === 'object') {
-            return  `, ${this.openPage}`;
-        }
-        return '';
-    }
-}
-
-export abstract class Item extends PagesIterable() {
+export abstract class Item {
 
     public abstract toString(): String;
 }
+
+type Constructor = new (...args: any[]) => {};
+
+export function PagesIterable<ItemType extends Constructor>(TheItem: ItemType) {
+
+    abstract class Mixed extends TheItem {
+
+        protected pages: Pages = new Pages([]);
+
+        public setPages(pages: Pages) {
+            this.pages = pages;
+        }
+
+        [Symbol.iterator](): Iterator<String> {
+
+            class PagesIterator implements Iterator<String> {
+
+                private step = 0;
+
+                constructor(public name: String, public pages: Pages) {}
+
+                public next(): IteratorResult<String> {
+                    if (this.step < this.pages.length) {
+                        return {
+                            done: false,
+                            value: `${this.name}, ${this.pages.getPage(this.step++)}`};
+                    }
+                    return {done: true, value: null};
+                }
+            }
+
+            return new PagesIterator(this.toString(), this.pages);
+        }
+    }
+
+    return Mixed;
+}
+
+export const PagesIterableItem = PagesIterable(Item as Constructor);

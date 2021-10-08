@@ -1,17 +1,19 @@
-import { Item } from './item';
+import { PagesIterableItem } from './item';
 import { Pages } from './pages';
 
-export class Book extends Item {
+
+export class Book extends PagesIterableItem {
 
     constructor(protected _title: String,
                 protected _author: String,
                 protected readonly pages: Pages) {
-        super(pages);
+        super();
+        super.setPages(pages);
     }
 
     public toString(): String {
         return (`Book: ${this.title} by ${this.author} with number of pages:` +
-                ` ${this.pages.length}${this.pageSuffix}`);
+                ` ${this.pages.length}`);
     }
 
     public get title(): String {
