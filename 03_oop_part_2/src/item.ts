@@ -4,20 +4,16 @@ import { Pages } from './pages';
 
 export abstract class Item {
 
+    protected pages: Pages = new Pages([]);
+
     public abstract toString(): String;
 }
 
-type Constructor = new (...args: any[]) => {};
+type Constructor = new (...args: any[]) => Item;
 
 export function PagesIterable<ItemType extends Constructor>(TheItem: ItemType) {
 
     abstract class Mixed extends TheItem {
-
-        protected pages: Pages = new Pages([]);
-
-        public setPages(pages: Pages) {
-            this.pages = pages;
-        }
 
         [Symbol.iterator](): Iterator<String> {
 

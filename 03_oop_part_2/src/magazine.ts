@@ -5,7 +5,6 @@ export class Magazine extends PagesIterableItem {
 
     constructor(protected _title: String, protected readonly pages: Pages) {
         super();
-        super.setPages(pages);
     }
 
     public toString(): String {

@@ -6,14 +6,12 @@ export class Comics extends PagesIterableItem {
     constructor(protected _title: String, protected _author: String,
                 protected _artist: String, protected readonly pages: Pages) {
       super();
-      super.setPages(pages);
     }
 
     public toString(): String {
         return (
             `Comics: ${this.title} by ${this.author}, the artist is ` +
-            `${this.artist}, number of pages: ${this.pages.length}` +
-            ``);
+            `${this.artist}, number of pages: ${this.pages.length}`);
     }
 
     public get title(): String {

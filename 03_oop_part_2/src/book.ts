@@ -8,7 +8,6 @@ export class Book extends PagesIterableItem {
                 protected _author: String,
                 protected readonly pages: Pages) {
         super();
-        super.setPages(pages);
     }
 
     public toString(): String {
