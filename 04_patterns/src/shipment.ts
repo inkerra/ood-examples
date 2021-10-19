@@ -1,13 +1,26 @@
 import {Shipper} from '../src/shipper'
 import {AirEastShipper} from '../src/shipper'
 
+export type Mark = 'Fragile' | 'Do Not Leave' | 'Return Receipt Requested';
 type State = {
     toAddress: String;
     fromAddress: String;
     toZipCode: String;
     fromZipCode: String;
     weight: number;
-    marks?: Array<String>;
+    marks?: Array<Mark>;
+}
+
+function with_marks(target: Shipment, propertyKey: string, desc: PropertyDescriptor) {
+    const originalMethod = desc.value;
+    desc.value = function(...args: any[]) {
+        const result = [originalMethod.apply(this, args)];
+        for (let mark of (this as Shipment).marks) {
+            result.push(`**MARK ${mark.toUpperCase()}**`);
+        }
+        return result.join('\n');
+    }
+    return desc;
 }
 
 export class Shipment {
@@ -24,6 +37,7 @@ export class Shipment {
         return ++Shipment.id;
     }
 
+    @with_marks
     public ship(): String {
         const cost = this.state.weight * this.shipper.getCost();
         return [
@@ -74,11 +88,11 @@ export class Shipment {
         this.state.weight = weight;
     }
 
-    public get marks(): Array<String> {
+    public get marks(): Array<Mark> {
         return this.state.marks || [];
     }
 
-    public set marks(marks: Array<String>) {
+    public set marks(marks: Array<Mark>) {
         this.state.marks = marks || [];
     }
 

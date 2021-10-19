@@ -67,4 +67,26 @@ describe('Client', () => {
           'Cost: $5.10'
       );
   });
+
+  it('ships with marks', () => {
+      const shipment = new Shipment({
+          'fromAddress': 'Address 3',
+          'fromZipCode': '98765',
+          'toAddress': 'Address 1',
+          'toZipCode': '12345',
+          'weight': 10
+      });
+
+      gui.select('Fragile', shipment);
+      gui.select('Return Receipt Requested', shipment);
+      gui.trigger('ship', shipment);
+
+      expect(console.log).toHaveBeenCalledWith(
+          'Shipment with the ID 123 will be picked up from Address 3 98765 ' +
+          'and shipped to Address 1 12345\n' +
+          'Cost: $5.10\n' +
+          '**MARK FRAGILE**\n' +
+          '**MARK RETURN RECEIPT REQUESTED**'
+      );
+  });
 });

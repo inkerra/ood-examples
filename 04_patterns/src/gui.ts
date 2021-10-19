@@ -1,3 +1,4 @@
+import {Mark} from '../src/shipment';
 import {Shipment} from '../src/shipment';
 
 export class Gui {
@@ -13,5 +14,11 @@ export class Gui {
         if (eventType == 'ship' && this.onShip) {
             this.onShip(state);
         }
+    }
+
+    public select(mark: Mark, state: Shipment) {
+        let marks = state.marks || [];
+        marks.push(mark);
+        state.marks = marks;
     }
 }
