@@ -18,5 +18,8 @@
     "jasmine-ts": "^0.3.3",
     "ts-node": "^8.10.2",
     "typescript": "^3.9.7"
+  },
+  "dependencies": {
+    "@types/jest": "^27.0.2"
   }
 }
