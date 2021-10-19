@@ -1,6 +1,7 @@
 import {Client} from '../src/client';
 import {Gui} from '../src/gui';
 import {Shipment} from '../src/shipment';
+import {buildFrom} from '../src/shipment';
 
 describe('Client', () => {
   var getShipmentIdSpy;
@@ -15,7 +16,7 @@ describe('Client', () => {
   });
 
   it('triggers shipment', () => {
-      const shipment = new Shipment({
+      const shipment = buildFrom({
           'fromAddress': 'Address 1',
           'fromZipCode': '12345',
           'toAddress': 'Address 2',
@@ -33,7 +34,7 @@ describe('Client', () => {
   });
 
   it('triggers chicago sprint shipment', () => {
-      const shipment = new Shipment({
+      const shipment = buildFrom({
           'fromAddress': 'Address 2',
           'fromZipCode': '54321',
           'toAddress': 'Address 1',
@@ -51,7 +52,7 @@ describe('Client', () => {
   });
 
   it('triggers pacific parcel shipment', () => {
-      const shipment = new Shipment({
+      const shipment = buildFrom({
           'fromAddress': 'Address 3',
           'fromZipCode': '98765',
           'toAddress': 'Address 1',
@@ -69,7 +70,7 @@ describe('Client', () => {
   });
 
   it('ships with marks', () => {
-      const shipment = new Shipment({
+      const shipment = buildFrom({
           'fromAddress': 'Address 3',
           'fromZipCode': '98765',
           'toAddress': 'Address 1',
