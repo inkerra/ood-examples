@@ -23,10 +23,10 @@ function with_marks(target: Shipment, propertyKey: string, desc: PropertyDescrip
     return desc;
 }
 
-export class Shipment {
+export abstract class Shipment {
     private static id = 0;
     private shipmentId: number;
-    private shipper: Shipper;
+    protected shipper: Shipper;
 
     constructor(private state: State) {
         this.shipmentId = Shipment.getShipmentId();
@@ -39,14 +39,15 @@ export class Shipment {
 
     @with_marks
     public ship(): String {
-        const cost = this.state.weight * this.shipper.getCost();
         return [
             `Shipment with the ID ${this.shipmentId} will be picked up ` +
             `from ${this.state.fromAddress} ${this.state.fromZipCode} and ` +
             `shipped to ${this.state.toAddress} ${this.state.toZipCode}`,
-            `Cost: \$${cost.toFixed(2)}`
+            `Cost: \$${this.cost.toFixed(2)}`
         ].join('\n');
     }
+
+    public abstract get cost(): number;
 
     public get toAddress(): String {
         return this.state.toAddress;
@@ -99,4 +100,32 @@ export class Shipment {
     public setShipper(shipper: Shipper) {
         this.shipper = shipper;
     }
+}
+
+class Letter extends Shipment {
+    public get cost(): number {
+        return this.weight * this.shipper.getCost();
+    }
+}
+
+class Package extends Shipment {
+    public get cost(): number {
+        return this.shipper.getPackageCost(this.weight);
+    }
+}
+
+class Oversized extends Shipment {
+    public get cost(): number {
+        return this.shipper.getOversizedCost(this.weight);
+    }
+}
+
+export function buildFrom(state: State): Shipment {
+    if (state.weight <= 15) {
+        return new Letter(state);
+    }
+    if (state.weight <= 160) {
+        return new Package(state);
+    }
+    return new Oversized(state);
 }

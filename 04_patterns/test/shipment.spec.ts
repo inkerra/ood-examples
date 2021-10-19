@@ -1,4 +1,5 @@
 import {Shipment} from '../src/shipment';
+import {buildFrom} from '../src/shipment';
 
 describe('Shipment', () => {
   beforeEach(function () {
@@ -8,7 +9,7 @@ describe('Shipment', () => {
   });
 
   it('ship should return correct value', () => {
-      const shipment = new Shipment({
+      const shipment = buildFrom({
           'fromAddress': 'Address 1',
           'fromZipCode': '12345',
           'toAddress': 'Address 2',
