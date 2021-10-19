@@ -31,4 +31,40 @@ describe('Client', () => {
           'Cost: $3.90'
       );
   });
+
+  it('triggers chicago sprint shipment', () => {
+      const shipment = new Shipment({
+          'fromAddress': 'Address 2',
+          'fromZipCode': '54321',
+          'toAddress': 'Address 1',
+          'toZipCode': '12345',
+          'weight': 10
+      });
+
+      gui.trigger('ship', shipment);
+
+      expect(console.log).toHaveBeenCalledWith(
+          'Shipment with the ID 123 will be picked up from Address 2 54321 ' +
+          'and shipped to Address 1 12345\n' +
+          'Cost: $4.20'
+      );
+  });
+
+  it('triggers pacific parcel shipment', () => {
+      const shipment = new Shipment({
+          'fromAddress': 'Address 3',
+          'fromZipCode': '98765',
+          'toAddress': 'Address 1',
+          'toZipCode': '12345',
+          'weight': 10
+      });
+
+      gui.trigger('ship', shipment);
+
+      expect(console.log).toHaveBeenCalledWith(
+          'Shipment with the ID 123 will be picked up from Address 3 98765 ' +
+          'and shipped to Address 1 12345\n' +
+          'Cost: $5.10'
+      );
+  });
 });

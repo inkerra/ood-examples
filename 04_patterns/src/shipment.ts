@@ -1,3 +1,6 @@
+import {Shipper} from '../src/shipper'
+import {AirEastShipper} from '../src/shipper'
+
 type State = {
     toAddress: String;
     fromAddress: String;
@@ -10,9 +13,11 @@ type State = {
 export class Shipment {
     private static id = 0;
     private shipmentId: number;
+    private shipper: Shipper;
 
     constructor(private state: State) {
         this.shipmentId = Shipment.getShipmentId();
+        this.shipper = new AirEastShipper();
     }
 
     public static getShipmentId(): number {
@@ -20,7 +25,7 @@ export class Shipment {
     }
 
     public ship(): String {
-        const cost = this.state.weight * 0.39;
+        const cost = this.state.weight * this.shipper.getCost();
         return [
             `Shipment with the ID ${this.shipmentId} will be picked up ` +
             `from ${this.state.fromAddress} ${this.state.fromZipCode} and ` +
@@ -75,5 +80,9 @@ export class Shipment {
 
     public set marks(marks: Array<String>) {
         this.state.marks = marks || [];
+    }
+
+    public setShipper(shipper: Shipper) {
+        this.shipper = shipper;
     }
 }
